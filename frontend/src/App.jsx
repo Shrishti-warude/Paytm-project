@@ -1,10 +1,15 @@
-function App() {
+import React from 'react'
+import { Route, Routes } from 'react-router-dom';
+import Dashboard from './pages/Dashboard';
+
+const App = () => {
+
   return (
-    <div className="min-h-screen bg-blue-500 flex items-center justify-center">
-      <h1 className="text-4xl font-bold text-white">
-        Tailwind Working 🔥
-      </h1>
-    </div>
+   <>
+   <Routes>
+    <Route path="/" element={< Dashboard />} />
+   </Routes>
+   </>
   )
 }
 
