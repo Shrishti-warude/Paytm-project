@@ -10,10 +10,10 @@ import axios from 'axios';
 
 
 const Signup = () => {
-  const [UserName , setUserName] = useState("");
-  const [Password , setPassword] = useState("");
-  const [FirstName , setFirstName] = useState("");
-  const [LastName , setLastName] = useState("");
+  const [userName , setUserName] = useState("");
+  const [password , setPassword] = useState("");
+  const [firstName , setFirstName] = useState("");
+  const [lastName , setLastName] = useState("");
   const navigate = useNavigate();
 
   return (
@@ -44,10 +44,10 @@ const Signup = () => {
         <div className="pt-4">
           <Button label={"SignUp"} onClick={async() => {
              const response = await axios.post("http://localhost:5000/user/signup" , {
-              UserName , 
-              Password,
-              FirstName,
-              LastName
+              userName, 
+              password,
+              firstName,
+              lastName
              });
               localStorage.setItem("token", response.data.token)
               navigate("/dashboard")

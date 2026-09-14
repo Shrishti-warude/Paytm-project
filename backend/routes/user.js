@@ -15,10 +15,10 @@ const router = express.Router();
 //SignUp
 
  const signupBody = zod.object({
-UserName: zod.email(),
-Password: zod.string(),
-FirstName: zod.string(),
-LastName: zod.string()
+userName: zod.email(),
+password: zod.string(),
+firstName: zod.string(),
+lastName: zod.string()
 })
 
 router.post("/signup", async (req, res) => {
@@ -36,7 +36,7 @@ router.post("/signup", async (req, res) => {
     }
 
  const existingUser = await User.findOne({ 
-    UserName: req.body.UserName
+    userName: req.body.userName
     });
 
     if(existingUser){
@@ -46,10 +46,10 @@ router.post("/signup", async (req, res) => {
     }
 
     const user = await User.create({
-        UserName: req.body.UserName,
-        Password: await bcrypt.hash(req.body.Password, 10),
-        FirstName: req.body.FirstName,
-        LastName: req.body.LastName,
+        userName: req.body.userName,
+        password: await bcrypt.hash(req.body.password, 10),
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
     });
     console.log(user)
     const userId  = user._id;
@@ -81,8 +81,8 @@ router.post("/signup", async (req, res) => {
      //SignIn
 
     const signinBody = zod.object({
-    UserName: zod.string().email(),
-    Password: zod.string()
+    userName: zod.string().email(),
+    password: zod.string()
 });
 
 router.post("/signin", async (req, res) => {
@@ -95,7 +95,7 @@ router.post("/signin", async (req, res) => {
     }
 
     const user = await User.findOne({
-        UserName: req.body.UserName
+        userName: req.body.userName
     });
 
     if (!user) {
@@ -105,8 +105,8 @@ router.post("/signin", async (req, res) => {
     }
 
     const passwordMatch = await bcrypt.compare(
-        req.body.Password,
-        user.Password
+        req.body.password,
+        user.password
     );
 
     if (!passwordMatch) {
@@ -131,9 +131,9 @@ router.post("/signin", async (req, res) => {
 
 // update body
 const updateBody = zod.object({
-    Password: zod.string().optional(),
-    FirstName: zod.string().optional(),
-    LastName: zod.string().optional(),
+    password: zod.string().optional(),
+    firstName: zod.string().optional(),
+    lastName: zod.string().optional(),
 })
 
 router.put("/update", authMiddleware , async (req , res) => {
