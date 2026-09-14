@@ -1,7 +1,7 @@
 const express = require("express");
 const zod = require("zod");
 // const { User } = require("../db");
-const User = require("../models/User");
+const {User, Account} = require('../models/User')
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const {authMiddleware} = require("../middleware/user");
@@ -15,22 +15,28 @@ const router = express.Router();
 //SignUp
 
  const signupBody = zod.object({
-username: zod.email(),
-firstName: zod.string(),
-lastName: zod.string(),
-password: zod.string()
+UserName: zod.email(),
+Password: zod.string(),
+FirstName: zod.string(),
+LastName: zod.string()
 })
 
 router.post("/signup", async (req, res) => {
- const{success} = signupBody.safeParse(req.body);
- if(!success){
-    return res.status(411).json({
-        error: "Invalid request body/ Email already exists"
-    });
- } 
+
+    console.log("BODY:", req.body);
+
+    const { success } = signupBody.safeParse(req.body);
+
+    console.log("ZOD SUCCESS:", success);
+
+    if (!success) {
+        return res.status(411).json({
+            error: "Invalid request body/ Email already exists"
+        });
+    }
 
  const existingUser = await User.findOne({ 
-    username: req.body.username
+    UserName: req.body.UserName
     });
 
     if(existingUser){
@@ -40,15 +46,15 @@ router.post("/signup", async (req, res) => {
     }
 
     const user = await User.create({
-        username: req.body.username,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        password: await bcrypt.hash(req.body.password, 10),
+        UserName: req.body.UserName,
+        Password: await bcrypt.hash(req.body.Password, 10),
+        FirstName: req.body.FirstName,
+        LastName: req.body.LastName,
     });
     console.log(user)
     const userId  = user._id;
 
-    
+
     await Account.create({
         userId,
         balance : 1+ Math.random() * 10000
@@ -75,8 +81,8 @@ router.post("/signup", async (req, res) => {
      //SignIn
 
     const signinBody = zod.object({
-    username: zod.string().email(),
-    password: zod.string()
+    UserName: zod.string().email(),
+    Password: zod.string()
 });
 
 router.post("/signin", async (req, res) => {
@@ -89,7 +95,7 @@ router.post("/signin", async (req, res) => {
     }
 
     const user = await User.findOne({
-        username: req.body.username
+        UserName: req.body.UserName
     });
 
     if (!user) {
@@ -99,8 +105,8 @@ router.post("/signin", async (req, res) => {
     }
 
     const passwordMatch = await bcrypt.compare(
-        req.body.password,
-        user.password
+        req.body.Password,
+        user.Password
     );
 
     if (!passwordMatch) {
@@ -125,9 +131,9 @@ router.post("/signin", async (req, res) => {
 
 // update body
 const updateBody = zod.object({
-    password: zod.string().optional(),
-    firstName: zod.string().optional(),
-    lastName: zod.string().optional(),
+    Password: zod.string().optional(),
+    FirstName: zod.string().optional(),
+    LastName: zod.string().optional(),
 })
 
 router.put("/update", authMiddleware , async (req , res) => {

@@ -41,7 +41,7 @@ const { required } = require('zod/mini');
 
     // Create a Schema for Users
     const userSchema = new mongoose.Schema({
-        username: {
+        UserName: {
             type: String,
             required: true,
             unique: true,
@@ -50,18 +50,18 @@ const { required } = require('zod/mini');
             minLength: 3,
             maxLength: 30
         },
-        password: {
+        Password: {
             type: String,
             required: true,
             minLength: 6
         },
-        firstName: {
+        FirstName: {
             type: String,
             required: true,
             trim: true,
             maxLength: 50
         },
-        lastName: {
+        LastName: {
             type: String,
             required: true,
             trim: true,
