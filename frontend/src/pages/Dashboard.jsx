@@ -1,6 +1,7 @@
 import React from 'react'
 import AppBar from '../components/AppBar';
 import Balance from '../components/Balance';
+import Users from '../components/Users';
 
 const Dashboard = () => {
   return (
@@ -8,6 +9,7 @@ const Dashboard = () => {
     <div>
       <AppBar/>
       <Balance value={10000}/>
+      <Users/>
     </div>
     </>
   )
